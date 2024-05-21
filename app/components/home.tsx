@@ -197,13 +197,14 @@ export function Home() {
   const chat = useChatStore();
   const { getRemoteSession } = useChatStore();
   useEffect(() => {
+    const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
     console.log("[Config] got config from build time", getClientConfig());
     useAccessStore.getState().fetch();
     let user_id = getQueryVariable("uid");
     const baseUrl = useAccessStore.getState().openaiUrl;
     let chatmsg =
       '[{"id":"S6b31U9DwZ9iJQrklAi0_","topic":"新的聊天","memoryPrompt":"","messages":[],"stat":{"tokenCount":0,"wordCount":0,"charCount":0},"lastUpdate":1714020809584,"lastSummarizeIndex":0,"mask":{"id":"ppB7YXvhE6H-H1Q58D_KT","avatar":"gpt-bot","name":"New Conversation","context":[],"syncGlobalConfig":true,"modelConfig":{"model":"gpt-3.5-turbo","temperature":0.5,"top_p":1,"max_tokens":4000,"presence_penalty":0,"frequency_penalty":0,"sendMemory":true,"historyMessageCount":4,"compressMessageLengthThreshold":1000,"enableInjectSystemPrompts":true,"template":"{{input}}"},"lang":"en","builtin":false,"createdAt":1714020809584}}]';
-    fetch(baseUrl + "/get-record?uid=" + user_id, {
+    fetch(backendUrl + "/get-record?uid=" + user_id, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

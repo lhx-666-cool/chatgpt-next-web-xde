@@ -7,7 +7,7 @@ import { useAccessStore } from "@/app/store";
 import $ from "jquery";
 import { json } from "stream/consumers";
 
-const backendUrl = "http://127.0.0.1:8448";
+const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
 export function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -66,7 +66,7 @@ export async function like(session: any) {
   let baseUrl = accessStore.openaiUrl;
   let user_id = getQueryVariable("uid");
   $.post({
-    url: baseUrl + "/add",
+    url: backendUrl + "/add",
     data: JSON.stringify({
       record: JSON.stringify(session.messages),
       uid: user_id,
@@ -88,7 +88,7 @@ export async function dislike(session: any) {
   let baseUrl = accessStore.openaiUrl;
   let user_id = getQueryVariable("uid");
   $.post({
-    url: baseUrl + "/add",
+    url: backendUrl + "/add",
     data: JSON.stringify({
       record: JSON.stringify(session.messages),
       uid: user_id,
@@ -110,7 +110,7 @@ export async function feedbackfunc(session: any, msg: string) {
   let baseUrl = accessStore.openaiUrl;
   let user_id = getQueryVariable("uid");
   $.post({
-    url: baseUrl + "/add",
+    url: backendUrl + "/add",
     data: JSON.stringify({
       record: JSON.stringify(session.messages),
       uid: user_id,

@@ -240,8 +240,9 @@ export const useChatStore = createPersistStore(
         // console.log(deletedSession.id);
         let user_id = getQueryVariable("uid");
         const baseUrl = useAccessStore.getState().openaiUrl;
+        const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
         fetch(
-          baseUrl +
+          backendUrl +
             "/delete-record?id=" +
             deletedSession.id +
             "&uid=" +
@@ -317,6 +318,7 @@ export const useChatStore = createPersistStore(
           // console.log(session);
           // console.log(session.messages); // 聊天刷新缓存在这里
           const baseUrl = useAccessStore.getState().openaiUrl;
+          const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
           session.lastUpdate = Date.now();
           const uid = getQueryVariable("uid");
           const record_id = session.id;
@@ -325,7 +327,7 @@ export const useChatStore = createPersistStore(
           const utc8Date = new Date(date.getTime() + 8 * 60 * 60 * 1000);
           const ISOdata = utc8Date.toISOString();
           console.log(uid, record_id, ISOdata, record);
-          fetch(baseUrl + "/add-record", {
+          fetch(backendUrl + "/add-record", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
