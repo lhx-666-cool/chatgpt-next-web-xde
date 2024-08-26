@@ -6,8 +6,11 @@ import { DEFAULT_MODELS } from "./constant";
 import { useAccessStore } from "@/app/store";
 import $ from "jquery";
 import { json } from "stream/consumers";
+import { execOnce } from "next/dist/shared/lib/utils";
 
-const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+// const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+const backendUrl = "http://127.0.0.1:2222"
+
 export function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -351,6 +354,7 @@ export function isMacOS(): boolean {
   return false;
 }
 
+
 export function getMessageTextContent(message: RequestMessage) {
   if (typeof message.content === "string") {
     return message.content;
@@ -374,6 +378,31 @@ export function getMessageImages(message: RequestMessage): string[] {
     }
   }
   return urls;
+}
+
+export function getChoice(message: string): string[] {
+  console.log(message)
+  message = message.replace("请输入问题类别：", "")
+
+  message = message.replaceAll("\n", "")
+
+  message = message.replace("----------", "");
+  message = message.replace(/##### 当前对话次数: \d.*?\d.*?$/g, "")
+  message = message.replaceAll(/- (.*?)\((.*?)\)/g, "$1,$2;")
+  console.log(message)
+  let res = message.split(";")
+  res.pop()
+  return res
+}
+
+export function shouldChoice(message: string): boolean {
+  const regex = /请输入问题类别：\n.*?文件/;
+  if (regex.test(message)) {
+    
+    return true
+  } else {
+    return false
+  }
 }
 
 export function isVisionModel(model: string) {

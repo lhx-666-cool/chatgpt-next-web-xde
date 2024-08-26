@@ -57,7 +57,7 @@ export interface ChatSession {
   lastUpdate: number;
   lastSummarizeIndex: number;
   clearContextIndex?: number;
-
+  type: string;
   mask: Mask;
 }
 
@@ -80,7 +80,7 @@ function createEmptySession(): ChatSession {
     },
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
-
+    type: "",
     mask: createEmptyMask(),
   };
 }
@@ -240,7 +240,8 @@ export const useChatStore = createPersistStore(
         // console.log(deletedSession.id);
         let user_id = getQueryVariable("uid");
         const baseUrl = useAccessStore.getState().openaiUrl;
-        const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+        // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+        const backendUrl = "http://127.0.0.1:2222"
         fetch(
           backendUrl +
             "/delete-record?id=" +
@@ -318,7 +319,8 @@ export const useChatStore = createPersistStore(
           // console.log(session);
           // console.log(session.messages); // 聊天刷新缓存在这里
           const baseUrl = useAccessStore.getState().openaiUrl;
-          const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+          // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+          const backendUrl = "http://127.0.0.1:2222"
           session.lastUpdate = Date.now();
           const uid = getQueryVariable("uid");
           const record_id = session.id;
@@ -607,25 +609,26 @@ export const useChatStore = createPersistStore(
           session.topic === DEFAULT_TOPIC &&
           countMessages(messages) >= SUMMARIZE_MIN_LEN
         ) {
-          const topicMessages = messages.concat(
-            createMessage({
-              role: "user",
-              content: Locale.Store.Prompt.Topic,
-            }),
-          );
-          api.llm.chat({
-            messages: topicMessages,
-            config: {
-              model: getSummarizeModel(session.mask.modelConfig.model),
-            },
-            onFinish(message) {
-              get().updateCurrentSession(
-                (session) =>
-                  (session.topic =
-                    message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
-              );
-            },
-          });
+          // const topicMessages = messages.concat(
+          //   createMessage({
+          //     role: "user",
+          //     content: Locale.Store.Prompt.Topic,
+          //   }),
+          // );
+          session.topic = session.messages[0].content.toString();
+          // api.llm.chat({
+            // messages: topicMessages,
+          //   config: {
+          //     model: getSummarizeModel(session.mask.modelConfig.model),
+          //   },
+          //   onFinish(message) {
+              // get().updateCurrentSession(
+              //   (session) =>
+              //     (session.topic =
+              //       message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+              // );
+          //   },
+          // });
         }
         const summarizeIndex = Math.max(
           session.lastSummarizeIndex,

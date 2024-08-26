@@ -74,6 +74,8 @@ import {
   like,
   dislike,
   feedbackfunc,
+  shouldChoice,
+  getChoice,
 } from "../utils";
 
 import dynamic from "next/dynamic";
@@ -683,9 +685,9 @@ function _Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isScrolledToBottom = scrollRef?.current
     ? Math.abs(
-        scrollRef.current.scrollHeight -
-          (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
-      ) <= 1
+      scrollRef.current.scrollHeight -
+      (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
+    ) <= 1
     : false;
   const { setAutoScroll, scrollDomToBottom } = useScrollToBottom(
     scrollRef,
@@ -966,27 +968,27 @@ function _Chat() {
       .concat(
         isLoading
           ? [
-              {
-                ...createMessage({
-                  role: "assistant",
-                  content: "……",
-                }),
-                preview: true,
-              },
-            ]
+            {
+              ...createMessage({
+                role: "assistant",
+                content: "……",
+              }),
+              preview: true,
+            },
+          ]
           : [],
       )
       .concat(
         userInput.length > 0 && config.sendPreviewBubble
           ? [
-              {
-                ...createMessage({
-                  role: "user",
-                  content: userInput,
-                }),
-                preview: true,
-              },
-            ]
+            {
+              ...createMessage({
+                role: "user",
+                content: userInput,
+              }),
+              preview: true,
+            },
+          ]
           : [],
       );
   }, [config, context, isLoading, session.messages, userInput]);
@@ -1075,7 +1077,7 @@ function _Chat() {
         if (payload.key || payload.url) {
           showConfirm(
             Locale.URLCommand.Settings +
-              `\n${JSON.stringify(payload, null, 4)}`,
+            `\n${JSON.stringify(payload, null, 4)}`,
           ).then((res) => {
             if (!res) return;
             if (payload.key) {
@@ -1461,7 +1463,7 @@ function _Chat() {
                       </div>
                     )}
                     <div className={styles["chat-message-item"]}>
-                      <Markdown
+                      {!shouldChoice(getMessageTextContent(message)) && <Markdown
                         content={getMessageTextContent(message)}
                         loading={
                           (message.preview || message.streaming) &&
@@ -1476,10 +1478,25 @@ function _Chat() {
                         fontSize={fontSize}
                         parentRef={scrollRef}
                         defaultShow={i >= messages.length - 6}
-                      />
+                      />}
+                      {shouldChoice(getMessageTextContent(message)) && <React.Fragment><div>请选择问题类别</div> <br /></React.Fragment>}
+                      {shouldChoice(getMessageTextContent(message)) && getChoice(getMessageTextContent(message)).map((content, idx) => {
+                        return (
+                          <React.Fragment>
+                            <Button variant="contained" color="primary" onClick={
+                              () => {
+                                session.type = content.split(",")[1];
+                                onResend(message)
+                              }
+                            }>{content.split(",")[0]}</Button>
+                            <br />
+                            <br />
+                          </React.Fragment>
+                        )
+                      })}
                       {getMessageImages(message).length == 1 && (
                         <img
-                          className={styles["chat-message-item-image"]}
+                          className={styles["-image"]}
                           src={getMessageImages(message)[0]}
                           alt=""
                         />
@@ -1546,11 +1563,10 @@ function _Chat() {
             }}
           />
           <label
-            className={`${styles["chat-input-panel-inner"]} ${
-              attachImages.length != 0
-                ? styles["chat-input-panel-inner-attach"]
-                : ""
-            }`}
+            className={`${styles["chat-input-panel-inner"]} ${attachImages.length != 0
+              ? styles["chat-input-panel-inner-attach"]
+              : ""
+              }`}
             htmlFor="chat-input"
           >
             <textarea
@@ -1601,6 +1617,7 @@ function _Chat() {
               onClick={() => doSubmit(userInput)}
             />
           </label>
+
         </div>
 
         {showExport && (
@@ -1614,6 +1631,9 @@ function _Chat() {
             }}
           />
         )}
+        <center>
+          <div style={{ color: 'gray', fontSize: '13px', marginBottom: '10px', marginTop: '-8px' }}>GPT可能会犯错，请核查重要信息</div>
+        </center>
       </div>
     </React.Fragment>
   );
