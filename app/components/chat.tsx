@@ -1482,7 +1482,7 @@ function _Chat() {
                       {shouldChoice(getMessageTextContent(message)) && <React.Fragment><div>请选择问题类别</div> <br /></React.Fragment>}
                       {shouldChoice(getMessageTextContent(message)) && getChoice(getMessageTextContent(message)).map((content, idx) => {
                         return (
-                          <React.Fragment>
+                          <React.Fragment key={idx}>
                             <Button variant="contained" color="primary" onClick={
                               () => {
                                 session.type = content.split(",")[1];
