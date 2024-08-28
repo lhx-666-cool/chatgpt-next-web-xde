@@ -25,7 +25,7 @@ export function getQueryVariable(variable: string) {
   // }, 2000);
 
   // return "";
-  return 114514
+  return "114514"
 }
 
 export function trimTopic(topic: string) {
