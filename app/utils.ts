@@ -8,24 +8,24 @@ import $ from "jquery";
 import { json } from "stream/consumers";
 import { execOnce } from "next/dist/shared/lib/utils";
 
-// const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
-const backendUrl = "http://127.0.0.1:2222"
+const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+// const backendUrl = "https://xdechat.xidian.edu.cn/forma"
 
 export function getQueryVariable(variable: string) {
-  // var query = window.location.search.substring(1);
-  // var vars = query.split("&");
-  // for (var i = 0; i < vars.length; i++) {
-  //   var pair = vars[i].split("=");
-  //   if (pair[0] == variable) {
-  //     return pair[1];
-  //   }
-  // }
-  // setTimeout(() => {
-  //   window.location.href = "https://xdspoc.xidian.edu.cn/";
-  // }, 2000);
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+  setTimeout(() => {
+    window.location.href = "https://xdspoc.xidian.edu.cn/";
+  }, 2000);
 
-  // return "";
-  return "114514"
+  return "";
+  // return "114514"
 }
 
 export function trimTopic(topic: string) {
