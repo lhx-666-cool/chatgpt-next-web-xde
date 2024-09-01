@@ -1479,7 +1479,7 @@ function _Chat() {
                         parentRef={scrollRef}
                         defaultShow={i >= messages.length - 6}
                       />}
-                      {shouldChoice(getMessageTextContent(message)) && <React.Fragment><div>请选择问题类别</div> <br /></React.Fragment>}
+                      {shouldChoice(getMessageTextContent(message)) && <React.Fragment><div>请选择问题类别</div> <br /><div>本次类选选择在本轮对话中有效，更换类别请重启开始对话</div> <br /></React.Fragment>}
                       {shouldChoice(getMessageTextContent(message)) && getChoice(getMessageTextContent(message)).map((content, idx) => {
                         return (
                           <React.Fragment key={idx}>
