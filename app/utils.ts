@@ -384,7 +384,7 @@ export function getMessageImages(message: RequestMessage): string[] {
 export function getChoice(message: string): string[] {
   console.log(message)
   message = message.replace("请输入问题类别：", "")
-
+  message = message.replace("本次类选选择在本轮对话中有效，更换类别请重启开始对话", "")
   message = message.replaceAll("\n", "")
 
   message = message.replace("----------", "");
