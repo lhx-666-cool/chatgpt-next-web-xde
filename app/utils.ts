@@ -397,7 +397,7 @@ export function getChoice(message: string): string[] {
 }
 
 export function shouldChoice(message: string): boolean {
-  const regex = /请输入问题类别：\n.*?文件/;
+  const regex = /请输入问题类别：\n本次类选选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
   if (regex.test(message)) {
     
     return true
