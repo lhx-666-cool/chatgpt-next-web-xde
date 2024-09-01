@@ -384,7 +384,7 @@ export function getMessageImages(message: RequestMessage): string[] {
 export function getChoice(message: string): string[] {
   console.log(message)
   message = message.replace("请输入问题类别：", "")
-  message = message.replace("本次类选选择在本轮对话中有效，更换类别请重启开始对话", "")
+  message = message.replace("本次类别选择在本轮对话中有效，更换类别请重启开始对话", "")
   message = message.replaceAll("\n", "")
 
   message = message.replace("----------", "");
@@ -397,7 +397,8 @@ export function getChoice(message: string): string[] {
 }
 
 export function shouldChoice(message: string): boolean {
-  const regex = /请输入问题类别：\n本次类选选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
+  const regex = /请输入问题类别：\n本次类别选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
+  console.log(regex.text(message);
   if (regex.test(message)) {
     
     return true
