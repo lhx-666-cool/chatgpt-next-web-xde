@@ -48,6 +48,7 @@ export function getUserId() {
 
     }
   }
+  return "111"
 }
 
 export function trimTopic(topic: string) {
