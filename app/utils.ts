@@ -40,7 +40,16 @@ export function getUserId() {
           return response.text(); // 如果返回的是纯文本/HTML
         })
         .then(data => {
-          console.log(data); // 在控制台打印请求结果
+          // console.log(data); // 在控制台打印请求结果
+          const regex = /<cas:uid>(.*?)<\/cas:uid>/;
+          const match = data.match(regex);
+          if (match) {
+            const result = match[1];
+            // console.log(result);  // 输出: test_xdechat
+            window.localStorage.setItem('userid', result)
+          } else {
+            window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
+          }
         })
         .catch(error => {
           console.error('There was a problem with the fetch operation:', error);
