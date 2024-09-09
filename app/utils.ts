@@ -30,9 +30,9 @@ export function getUserId() {
   } else {
     const ticket = getQueryVariable('ticket')
     if (ticket === "") {
-      window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/111"
+      window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
     } else {
-      fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/111/&ticket=' + ticket)
+      fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/&ticket=' + ticket)
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
