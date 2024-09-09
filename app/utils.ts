@@ -57,7 +57,7 @@ export function getUserId() {
 
     }
   }
-  return "111"
+  return localStorage.getItem('userid');
 }
 
 export function trimTopic(topic: string) {
