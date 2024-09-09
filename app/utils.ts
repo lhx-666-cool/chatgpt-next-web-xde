@@ -90,7 +90,7 @@ export async function copyToClipboard(text: string) {
 export async function like(session: any) {
   const accessStore = useAccessStore.getState();
   let baseUrl = accessStore.openaiUrl;
-  let user_id = getQueryVariable("uid");
+  let user_id = getUserId();
   $.post({
     url: backendUrl + "/add",
     data: JSON.stringify({
@@ -112,7 +112,7 @@ export async function like(session: any) {
 export async function dislike(session: any) {
   const accessStore = useAccessStore.getState();
   let baseUrl = accessStore.openaiUrl;
-  let user_id = getQueryVariable("uid");
+  let user_id = getUserId();
   $.post({
     url: backendUrl + "/add",
     data: JSON.stringify({
@@ -134,7 +134,7 @@ export async function dislike(session: any) {
 export async function feedbackfunc(session: any, msg: string) {
   const accessStore = useAccessStore.getState();
   let baseUrl = accessStore.openaiUrl;
-  let user_id = getQueryVariable("uid");
+  let user_id = getUserId();
   $.post({
     url: backendUrl + "/add",
     data: JSON.stringify({

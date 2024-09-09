@@ -20,7 +20,7 @@ import { prettyObject } from "../utils/format";
 import { estimateTokenLength } from "../utils/token";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
-import { getQueryVariable } from "../utils";
+import { getUserId } from "../utils";
 import { useAccessStore } from "./access";
 
 export type ChatMessage = RequestMessage & {
@@ -238,7 +238,7 @@ export const useChatStore = createPersistStore(
 
         if (!deletedSession) return;
         // console.log(deletedSession.id);
-        let user_id = getQueryVariable("uid");
+        let user_id = getUserId();
         const baseUrl = useAccessStore.getState().openaiUrl;
         const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
         // const backendUrl = "http://127.0.0.1:2222"
@@ -322,7 +322,7 @@ export const useChatStore = createPersistStore(
           const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
           // const backendUrl = "http://127.0.0.1:2222"
           session.lastUpdate = Date.now();
-          const uid = getQueryVariable("uid");
+          const uid = getUserId();
           const record_id = session.id;
           const record = JSON.stringify(session);
           const date = new Date(session.lastUpdate);

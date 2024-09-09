@@ -29,7 +29,7 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  getQueryVariable,
+  getUserId
 } from "@/app/utils";
 
 export interface OpenAIListModelResponse {
@@ -98,7 +98,7 @@ export class ChatGPTApi implements LLMApi {
         model: options.config.model,
       },
     };
-    let user_id = getQueryVariable("uid");
+    let user_id = getUserId()
     let record_id = useChatStore.getState().currentSession().id;
     let type = useChatStore.getState().currentSession().type;
     const requestPayload = {
