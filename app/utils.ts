@@ -20,12 +20,34 @@ export function getQueryVariable(variable: string) {
       return pair[1];
     }
   }
-  setTimeout(() => {
-    window.location.href = "https://xdspoc.xidian.edu.cn/";
-  }, 2000);
-
   return "";
-  // return "114514"
+}
+
+export function getUserId() {
+  const value = localStorage.getItem('userid');
+  if (value !== null) {
+    return value
+  } else {
+    const ticket = getQueryVariable('ticket')
+    if (ticket === "") {
+      window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/111"
+    } else {
+      fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/111/&ticket=' + ticket)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.text(); // 如果返回的是纯文本/HTML
+        })
+        .then(data => {
+          console.log(data); // 在控制台打印请求结果
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+
+    }
+  }
 }
 
 export function trimTopic(topic: string) {
@@ -401,7 +423,7 @@ export function shouldChoice(message: string): boolean {
   console.log(regex.test(message));
   console.log(message);
   if (regex.test(message)) {
-    
+
     return true
   } else {
     return false
