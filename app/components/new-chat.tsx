@@ -16,14 +16,15 @@ import { MaskAvatar } from "./mask";
 import { useCommand } from "../command";
 import { showConfirm } from "./ui-lib";
 import { BUILTIN_MASK_STORE } from "../masks";
+import { group } from "console";
 
 function MaskItem(props: { mask: Mask; onClick?: () => void }) {
   return (
     <div className={styles["mask"]} onClick={props.onClick}>
-      <MaskAvatar
+      {/* <MaskAvatar
         avatar={props.mask.avatar}
         model={props.mask.modelConfig.model}
-      />
+      /> */}
       <div className={styles["mask-name"] + " one-line"}>{props.mask.name}</div>
     </div>
   );
@@ -77,7 +78,8 @@ export function NewChat() {
 
   const masks = maskStore.getAll();
   const groups = useMaskGroup(masks);
-
+  console.log(groups);
+  // const groups = masks
   const navigate = useNavigate();
   const config = useAppConfig();
 
@@ -88,6 +90,13 @@ export function NewChat() {
   const startChat = (mask?: Mask) => {
     setTimeout(() => {
       chatStore.newSession(mask);
+      navigate(Path.Chat);
+    }, 10);
+  };
+
+  const startChatWithType = (type: string) => {
+    setTimeout(() => {
+      chatStore.newSessionWithType(type);
       navigate(Path.Chat);
     }, 10);
   };
@@ -167,7 +176,46 @@ export function NewChat() {
       </div>
 
       <div className={styles["masks"]} ref={maskRef}>
-        {groups.map((masks, i) => (
+        <br />
+        <br />
+        <br />
+        <br />
+        <IconButton
+          text={"制度文件"}
+          onClick={() => startChatWithType("system_database")}
+          type="primary"
+          className={styles["btn"]}
+          size="big"
+        />
+        <IconButton
+          text={"计算机领域"}
+          onClick={() => startChatWithType("compute_database")}
+          type="primary"
+          className={styles["btn"]}
+          size="big"
+        />
+        <IconButton
+          text={"电路领域"}
+          onClick={() => startChatWithType("circuit_database")}
+          type="primary"
+          className={styles["btn"]}
+          size="big"
+        />
+        <IconButton
+          text={"闲聊"}
+          onClick={() => startChatWithType("chat")}
+          type="primary"
+          className={styles["btn"]}
+          size="big"
+        />
+        {/* {masks.map((mask, index) => (
+          <MaskItem
+            key={index}
+            mask={mask}
+            onClick={() => startChat(mask)}
+          />
+        ))} */}
+        {/* {groups.map((masks, i) => (
           <div key={i} className={styles["mask-row"]}>
             {masks.map((mask, index) => (
               <MaskItem
@@ -177,7 +225,7 @@ export function NewChat() {
               />
             ))}
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );

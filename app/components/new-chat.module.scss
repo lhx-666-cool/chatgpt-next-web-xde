@@ -64,29 +64,20 @@
       margin-left: 10px;
     }
   }
-
+  
   .masks {
     flex-grow: 1;
     width: 100%;
     overflow: auto;
     align-items: center;
-    padding-top: 20px;
-
-    $linear: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 1),
-      rgba(0, 0, 0, 0)
-    );
-
-    -webkit-mask-image: $linear;
-    mask-image: $linear;
-
+    display: flex;
+    justify-content: center;
     animation: slide-in ease 0.5s;
-
+    .btn {
+      margin: 10px;
+    }
     .mask-row {
       display: flex;
-      // justify-content: center;
       margin-bottom: 10px;
 
       @for $i from 1 to 10 {
@@ -116,7 +107,7 @@
         }
 
         .mask-name {
-          margin-left: 10px;
+          // margin-left: 10px;
           font-size: 14px;
         }
       }
