@@ -188,7 +188,6 @@ export function SideBar(props: { className?: string }) {
           shadow
         />
       </div>
-
       <div
         className={styles["sidebar-body"]}
         onClick={(e) => {
@@ -199,7 +198,8 @@ export function SideBar(props: { className?: string }) {
       >
         <ChatList narrow={shouldNarrow} />
       </div>
-
+      {/* <video src="#"></video> */}
+      {/* <img src="http://mooc1.chaoxing.com/mooc-ans/phone/course/qrc?content=http%3A%2F%2Fmooc1.chaoxing.com%2Fmooc-ans%2Fcourse%2F221457285.html&enc=0d998a3f4db7dfb9ff91e2358d0cb53e" alt="" /> */}
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>
           <div className={styles["sidebar-action"] + " " + styles.mobile}>
@@ -217,11 +217,6 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          {/* <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-              <IconButton icon={<GithubIcon />} shadow />
-            </a>
-          </div> */}
         </div>
         <div>
           <IconButton
@@ -239,7 +234,6 @@ export function SideBar(props: { className?: string }) {
           />
         </div>
       </div>
-
       <div
         className={styles["sidebar-drag"]}
         onPointerDown={(e) => onDragStart(e as any)}
