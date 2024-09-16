@@ -59,6 +59,7 @@ export interface ChatSession {
   clearContextIndex?: number;
   type: string;
   mask: Mask;
+  file_url: string;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -81,6 +82,7 @@ function createEmptySession(): ChatSession {
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
     type: "",
+    file_url: "",
     mask: createEmptyMask(),
   };
 }
@@ -249,8 +251,9 @@ export const useChatStore = createPersistStore(
         // console.log(deletedSession.id);
         let user_id = getUserId();
         const baseUrl = useAccessStore.getState().openaiUrl;
-        const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+        // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
         // const backendUrl = "http://127.0.0.1:2222"
+        const backendUrl = "http://127.0.0.1:2222";
         fetch(
           backendUrl +
             "/delete-record?id=" +
@@ -328,8 +331,9 @@ export const useChatStore = createPersistStore(
           // console.log(session);
           // console.log(session.messages); // 聊天刷新缓存在这里
           const baseUrl = useAccessStore.getState().openaiUrl;
-          const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+          // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
           // const backendUrl = "http://127.0.0.1:2222"
+          const backendUrl = "http://127.0.0.1:2222";
           session.lastUpdate = Date.now();
           const uid = getUserId();
           const record_id = session.id;

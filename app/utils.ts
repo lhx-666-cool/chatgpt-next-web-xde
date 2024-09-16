@@ -8,8 +8,9 @@ import $ from "jquery";
 import { json } from "stream/consumers";
 import { execOnce } from "next/dist/shared/lib/utils";
 
-const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+// const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
 // const backendUrl = "https://xdechat.xidian.edu.cn/forma"
+const backendUrl = "http://127.0.0.1:2222";
 
 export function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);
@@ -414,7 +415,6 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function getChoice(message: string): string[] {
-  console.log(message);
   message = message.replace("请输入问题类别：", "");
   message = message.replace(
     "本次类别选择在本轮对话中有效，更换类别请重启开始对话",
@@ -425,7 +425,6 @@ export function getChoice(message: string): string[] {
   message = message.replace("----------", "");
   message = message.replace(/##### 当前对话次数: \d.*?\d.*?$/g, "");
   message = message.replaceAll(/- (.*?)\((.*?)\)/g, "$1,$2;");
-  console.log(message);
   let res = message.split(";");
   res.pop();
   return res;
@@ -434,8 +433,6 @@ export function getChoice(message: string): string[] {
 export function shouldChoice(message: string): boolean {
   const regex =
     /请输入问题类别：\n本次类别选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
-  console.log(regex.test(message));
-  console.log(message);
   if (regex.test(message)) {
     return true;
   } else {
@@ -443,6 +440,26 @@ export function shouldChoice(message: string): boolean {
   }
 }
 
+export function uploadFile(file: File, url: string): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(new Error(`Upload failed with status: ${response.status}`));
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
 export function isVisionModel(model: string) {
   return (
     // model.startsWith("gpt-4-vision") ||

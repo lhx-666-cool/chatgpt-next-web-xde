@@ -208,6 +208,13 @@ export function NewChat() {
           className={styles["btn"]}
           size="big"
         />
+        <IconButton
+          text={"论文评阅"}
+          onClick={() => startChatWithType("paper")}
+          type="primary"
+          className={styles["btn"]}
+          size="big"
+        />
         {/* {masks.map((mask, index) => (
           <MaskItem
             key={index}

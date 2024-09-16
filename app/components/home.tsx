@@ -197,8 +197,10 @@ export function Home() {
   const chat = useChatStore();
   const { getRemoteSession } = useChatStore();
   useEffect(() => {
-    const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+    // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
     // const backendUrl = "http://127.0.0.1:2222"
+    const backendUrl = "http://127.0.0.1:2222";
+
     console.log("[Config] got config from build time", getClientConfig());
     useAccessStore.getState().fetch();
     let user_id = getUserId();
