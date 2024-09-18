@@ -25,4 +25,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/chatgpt-next-web-xde-display:dev2
+        tags: ${{ secrets.DOCKER_USERNAME }}/chatgpt-next-web-xde-display:dev3
