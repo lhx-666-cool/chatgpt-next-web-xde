@@ -204,6 +204,8 @@ export function SideBar(props: { className?: string }) {
         src="/h5player/flv/index.html"
         className={styles["sidebar-flv"]}
         allowTransparency={true}
+        height={240}
+        width={400}
       ></iframe>
 
       <div className={styles["sidebar-tail"]}>

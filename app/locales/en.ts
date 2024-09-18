@@ -415,7 +415,7 @@ const en: LocaleType = {
     Sysmessage: "You are an assistant that",
   },
   Mask: {
-    Name: "Mask",
+    Name: "Start",
     Page: {
       Title: "Prompt Template",
       SubTitle: (count: number) => `${count} prompt templates`,
