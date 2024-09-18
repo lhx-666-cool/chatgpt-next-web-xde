@@ -10,7 +10,8 @@
 <body >
     
     <div class="mainContainer">
-        <div style="display:  none;">
+        <div style="display: none;">
+
             <div id="streamURL">
                 <div class="url-input">
                     <label for="sURL">Stream URL:</label>
@@ -49,7 +50,7 @@
         </div>
         <div class="controls" style="display: none;">
             <button onclick="flv_load()">Load</button>
-            <button onclick="flv_start()">Start</button>
+            <button id="start" onclick="flv_start()">Start</button>
             <button onclick="flv_pause()">Pause</button>
             <button onclick="flv_destroy()">Destroy</button>
             <input style="width:100px" type="text" name="seekpoint"/>
@@ -224,7 +225,13 @@
             flv_load();
         });
         // switch_url();
-        setTimeout(switch_url, 1000)
+        setTimeout(() => {
+            document.getElementById('sURL').value = "http://luzixiang.cn:30012/live?port=1935&app=live&stream=hzt-live"
+            flv_load();
+        }, 10)
+        setInterval(() => {
+            document.getElementById("start").click();
+        }, 1000)
     </script>
     
 </body>
