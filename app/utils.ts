@@ -10,7 +10,8 @@ import { execOnce } from "next/dist/shared/lib/utils";
 
 // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
 // const backendUrl = "https://xdechat.xidian.edu.cn/forma"
-const backendUrl = "http://127.0.0.1:2222";
+// const backendUrl = "http://127.0.0.1:2222";
+const backendUrl = "http://123.60.97.63:33333";
 
 export function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);

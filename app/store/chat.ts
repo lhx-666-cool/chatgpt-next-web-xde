@@ -253,7 +253,9 @@ export const useChatStore = createPersistStore(
         const baseUrl = useAccessStore.getState().openaiUrl;
         // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
         // const backendUrl = "http://127.0.0.1:2222"
-        const backendUrl = "http://127.0.0.1:2222";
+        // const backendUrl = "http://127.0.0.1:2222";
+        const backendUrl = "http://123.60.97.63:33333";
+
         fetch(
           backendUrl +
             "/delete-record?id=" +
@@ -333,7 +335,9 @@ export const useChatStore = createPersistStore(
           const baseUrl = useAccessStore.getState().openaiUrl;
           // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
           // const backendUrl = "http://127.0.0.1:2222"
-          const backendUrl = "http://127.0.0.1:2222";
+          // const backendUrl = "http://127.0.0.1:2222";
+          const backendUrl = "http://123.60.97.63:33333";
+
           session.lastUpdate = Date.now();
           const uid = getUserId();
           const record_id = session.id;

@@ -199,7 +199,8 @@ export function Home() {
   useEffect(() => {
     // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
     // const backendUrl = "http://127.0.0.1:2222"
-    const backendUrl = "http://127.0.0.1:2222";
+    // const backendUrl = "http://127.0.0.1:2222";
+    const backendUrl = "http://123.60.97.63:33333";
 
     console.log("[Config] got config from build time", getClientConfig());
     useAccessStore.getState().fetch();

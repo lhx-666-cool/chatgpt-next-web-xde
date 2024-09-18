@@ -479,7 +479,9 @@ export function ChatActions(props: {
       setShowUploadFile(true);
       setUploadFileName("请稍等，文件上传中");
       // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
-      const backendUrl = "http://127.0.0.1:2222";
+      // const backendUrl = "http://127.0.0.1:2222";
+      const backendUrl = "http://123.60.97.63:33333";
+
       uploadFile(file, backendUrl + "/upload")
         .then((res) => res.json())
         .then((res) => {
@@ -487,7 +489,7 @@ export function ChatActions(props: {
           if (res.code === 200) {
             setUploadFileName("已上传文件: " + file.name);
             chatStore.updateCurrentSession((session) => {
-              session.file_url = backendUrl + "/uploads/" + res.filename;
+              session.file_url = res.filename;
               console.log(session.file_url);
             });
           } else {
