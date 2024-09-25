@@ -75,11 +75,8 @@ export function getName() {
 }
 
 export function logout() {
-  fetch("https://ids.xidian.edu.cn/authserver/logout?service=https://xdechat.xidian.edu.cn/")
   window.localStorage.clear();
-  setTimeout(() => {
-    window.location.href = "https://xdechat.xidian.edu.cn"
-  }, 1000);
+  window.location.href = "https://ids.xidian.edu.cn/authserver/logout?service=https://xdechat.xidian.edu.cn/"
 }
 export function trimTopic(topic: string) {
   // Fix an issue where double quotes still show in the Indonesian language
