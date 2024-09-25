@@ -216,7 +216,7 @@ export function SideBar(props: { className?: string }) {
             text={shouldNarrow ? undefined : Locale.Home.Logout}
             onClick={() => {
               window.localStorage.clear();
-              window.location.reload();
+              window.location.href = "https://xdechat.xidian.edu.cn"
             }}
             shadow
           />
