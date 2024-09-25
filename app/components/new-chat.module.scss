@@ -73,8 +73,10 @@
     display: flex;
     justify-content: center;
     animation: slide-in ease 0.5s;
+    flex-wrap: wrap;
     .btn {
       margin: 10px;
+      width: 115px;
     }
     .mask-row {
       display: flex;
