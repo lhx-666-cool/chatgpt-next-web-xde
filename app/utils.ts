@@ -54,6 +54,7 @@ export function getUserId() {
             window.localStorage.setItem('userid', result)
             const nameResult = nameMatch[1];
             window.localStorage.setItem('username', nameResult);
+            window.location.reload();
           } else {
             window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
           }
