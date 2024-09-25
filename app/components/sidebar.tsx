@@ -217,6 +217,7 @@ export function SideBar(props: { className?: string }) {
             onClick={() => {
               window.localStorage.clear();
               window.location.href = "https://xdechat.xidian.edu.cn"
+              
             }}
             shadow
           />

@@ -73,6 +73,13 @@ export function getName() {
   }
   return "请登录"
 }
+
+export function logout() {
+  fetch("https://ids.xidian.edu.cn/authserver/logout?service=https://xdechat.xidian.edu.cn/")
+  window.localStorage.clear();
+  window.location.href = "https://xdechat.xidian.edu.cn"
+              
+}
 export function trimTopic(topic: string) {
   // Fix an issue where double quotes still show in the Indonesian language
   // This will remove the specified punctuation from the end of the string
