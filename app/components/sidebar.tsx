@@ -29,7 +29,7 @@ import {
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
-import { isIOS, useMobileScreen, getName } from "../utils";
+import { isIOS, useMobileScreen, getName, logout } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
 
@@ -215,9 +215,7 @@ export function SideBar(props: { className?: string }) {
             icon={<LogoutIcon />}
             text={shouldNarrow ? undefined : Locale.Home.Logout}
             onClick={() => {
-              window.localStorage.clear();
-              window.location.href = "https://xdechat.xidian.edu.cn"
-              
+              logout();
             }}
             shadow
           />
