@@ -156,7 +156,7 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          XDeChat
+          慧通
         </div>
         <div className={styles["sidebar-sub-title"]}>
           西安电子科技大学电子信息类学科大模型
@@ -188,7 +188,6 @@ export function SideBar(props: { className?: string }) {
           shadow
         />
       </div>
-
       <div
         className={styles["sidebar-body"]}
         onClick={(e) => {
@@ -199,6 +198,15 @@ export function SideBar(props: { className?: string }) {
       >
         <ChatList narrow={shouldNarrow} />
       </div>
+      {/* <video src="#"></video> */}
+      {/* <img src="http://mooc1.chaoxing.com/mooc-ans/phone/course/qrc?content=http%3A%2F%2Fmooc1.chaoxing.com%2Fmooc-ans%2Fcourse%2F221457285.html&enc=0d998a3f4db7dfb9ff91e2358d0cb53e" alt="" /> */}
+      <iframe
+        src="/h5player/flv/index.html"
+        className={styles["sidebar-flv"]}
+        allowTransparency={true}
+        height={240}
+        width={400}
+      ></iframe>
 
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>
@@ -217,11 +225,6 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          {/* <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-              <IconButton icon={<GithubIcon />} shadow />
-            </a>
-          </div> */}
         </div>
         <div>
           <IconButton
@@ -239,7 +242,6 @@ export function SideBar(props: { className?: string }) {
           />
         </div>
       </div>
-
       <div
         className={styles["sidebar-drag"]}
         onPointerDown={(e) => onDragStart(e as any)}

@@ -29,7 +29,7 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  getUserId
+  getUserId,
 } from "@/app/utils";
 
 export interface OpenAIListModelResponse {
@@ -98,12 +98,14 @@ export class ChatGPTApi implements LLMApi {
         model: options.config.model,
       },
     };
-    let user_id = getUserId()
+    let user_id = getUserId();
     let record_id = useChatStore.getState().currentSession().id;
+    let file_url = useChatStore.getState().currentSession().file_url;
     let type = useChatStore.getState().currentSession().type;
     const requestPayload = {
       messages,
       uid: user_id,
+      file_url: file_url,
       record_id: record_id,
       stream: options.config.stream,
       model: modelConfig.model,
@@ -111,7 +113,7 @@ export class ChatGPTApi implements LLMApi {
       presence_penalty: modelConfig.presence_penalty,
       frequency_penalty: modelConfig.frequency_penalty,
       top_p: modelConfig.top_p,
-      type: type
+      type: type,
       // max_tokens: Math.max(modelConfig.max_tokens, 1024),
       // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
     };

@@ -59,6 +59,7 @@ export interface ChatSession {
   clearContextIndex?: number;
   type: string;
   mask: Mask;
+  file_url: string;
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
@@ -81,6 +82,7 @@ function createEmptySession(): ChatSession {
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
     type: "",
+    file_url: "",
     mask: createEmptyMask(),
   };
 }
@@ -224,7 +226,16 @@ export const useChatStore = createPersistStore(
           sessions: [session].concat(state.sessions),
         }));
       },
+      newSessionWithType(type: string) {
+        const session = createEmptySession();
 
+        session.type = type;
+
+        set((state) => ({
+          currentSessionIndex: 0,
+          sessions: [session].concat(state.sessions),
+        }));
+      },
       nextSession(delta: number) {
         const n = get().sessions.length;
         const limit = (x: number) => (x + n) % n;
@@ -240,8 +251,11 @@ export const useChatStore = createPersistStore(
         // console.log(deletedSession.id);
         let user_id = getUserId();
         const baseUrl = useAccessStore.getState().openaiUrl;
-        const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+        // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
         // const backendUrl = "http://127.0.0.1:2222"
+        // const backendUrl = "http://127.0.0.1:2222";
+        const backendUrl = "http://123.60.97.63:33333";
+
         fetch(
           backendUrl +
             "/delete-record?id=" +
@@ -319,8 +333,11 @@ export const useChatStore = createPersistStore(
           // console.log(session);
           // console.log(session.messages); // 聊天刷新缓存在这里
           const baseUrl = useAccessStore.getState().openaiUrl;
-          const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+          // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
           // const backendUrl = "http://127.0.0.1:2222"
+          // const backendUrl = "http://127.0.0.1:2222";
+          const backendUrl = "http://123.60.97.63:33333";
+
           session.lastUpdate = Date.now();
           const uid = getUserId();
           const record_id = session.id;
@@ -617,16 +634,16 @@ export const useChatStore = createPersistStore(
           // );
           session.topic = session.messages[0].content.toString();
           // api.llm.chat({
-            // messages: topicMessages,
+          // messages: topicMessages,
           //   config: {
           //     model: getSummarizeModel(session.mask.modelConfig.model),
           //   },
           //   onFinish(message) {
-              // get().updateCurrentSession(
-              //   (session) =>
-              //     (session.topic =
-              //       message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
-              // );
+          // get().updateCurrentSession(
+          //   (session) =>
+          //     (session.topic =
+          //       message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+          // );
           //   },
           // });
         }

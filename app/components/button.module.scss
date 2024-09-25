@@ -81,3 +81,14 @@
     margin-left: 5px;
   }
 }
+
+.icon-button-text-big {
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:not(:first-child) {
+    margin-left: 5px;
+  }
+}

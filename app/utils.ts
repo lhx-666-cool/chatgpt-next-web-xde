@@ -8,8 +8,10 @@ import $ from "jquery";
 import { json } from "stream/consumers";
 import { execOnce } from "next/dist/shared/lib/utils";
 
-const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
+// const backendUrl = "https://xdechat.xidian.edu.cn/formatapi";
 // const backendUrl = "https://xdechat.xidian.edu.cn/forma"
+// const backendUrl = "http://127.0.0.1:2222";
+const backendUrl = "http://123.60.97.63:33333";
 
 export function getQueryVariable(variable: string) {
   var query = window.location.search.substring(1);
@@ -24,40 +26,41 @@ export function getQueryVariable(variable: string) {
 }
 
 export function getUserId() {
-  const value = localStorage.getItem('userid');
-  if (value !== null) {
-    return value
-  } else {
-    const ticket = getQueryVariable('ticket')
-    if (ticket === "") {
-      window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
-    } else {
-      fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/&ticket=' + ticket)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-          }
-          return response.text(); // 如果返回的是纯文本/HTML
-        })
-        .then(data => {
-          // console.log(data); // 在控制台打印请求结果
-          const regex = /<cas:uid>(.*?)<\/cas:uid>/;
-          const match = data.match(regex);
-          if (match) {
-            const result = match[1];
-            // console.log(result);  // 输出: test_xdechat
-            window.localStorage.setItem('userid', result)
-          } else {
-            window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
-          }
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
+  return "114514";
+  // const value = localStorage.getItem('userid');
+  // if (value !== null) {
+  //   return value
+  // } else {
+  //   const ticket = getQueryVariable('ticket')
+  //   if (ticket === "") {
+  //     window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
+  //   } else {
+  //     fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/&ticket=' + ticket)
+  //       .then(response => {
+  //         if (!response.ok) {
+  //           throw new Error('Network response was not ok ' + response.statusText);
+  //         }
+  //         return response.text(); // 如果返回的是纯文本/HTML
+  //       })
+  //       .then(data => {
+  //         // console.log(data); // 在控制台打印请求结果
+  //         const regex = /<cas:uid>(.*?)<\/cas:uid>/;
+  //         const match = data.match(regex);
+  //         if (match) {
+  //           const result = match[1];
+  //           // console.log(result);  // 输出: test_xdechat
+  //           window.localStorage.setItem('userid', result)
+  //         } else {
+  //           window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.error('There was a problem with the fetch operation:', error);
+  //       });
 
-    }
-  }
-  return localStorage.getItem('userid');
+  //   }
+  // }
+  // return localStorage.getItem('userid');
 }
 
 export function trimTopic(topic: string) {
@@ -387,7 +390,6 @@ export function isMacOS(): boolean {
   return false;
 }
 
-
 export function getMessageTextContent(message: RequestMessage) {
   if (typeof message.content === "string") {
     return message.content;
@@ -414,32 +416,51 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function getChoice(message: string): string[] {
-  console.log(message)
-  message = message.replace("请输入问题类别：", "")
-  message = message.replace("本次类别选择在本轮对话中有效，更换类别请重启开始对话", "")
-  message = message.replaceAll("\n", "")
+  message = message.replace("请输入问题类别：", "");
+  message = message.replace(
+    "本次类别选择在本轮对话中有效，更换类别请重启开始对话",
+    "",
+  );
+  message = message.replaceAll("\n", "");
 
   message = message.replace("----------", "");
-  message = message.replace(/##### 当前对话次数: \d.*?\d.*?$/g, "")
-  message = message.replaceAll(/- (.*?)\((.*?)\)/g, "$1,$2;")
-  console.log(message)
-  let res = message.split(";")
-  res.pop()
-  return res
+  message = message.replace(/##### 当前对话次数: \d.*?\d.*?$/g, "");
+  message = message.replaceAll(/- (.*?)\((.*?)\)/g, "$1,$2;");
+  let res = message.split(";");
+  res.pop();
+  return res;
 }
 
 export function shouldChoice(message: string): boolean {
-  const regex = /请输入问题类别：\n本次类别选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
-  console.log(regex.test(message));
-  console.log(message);
+  const regex =
+    /请输入问题类别：\n本次类别选择在本轮对话中有效，更换类别请重启开始对话\n.*?文件/;
   if (regex.test(message)) {
-
-    return true
+    return true;
   } else {
-    return false
+    return false;
   }
 }
 
+export function uploadFile(file: File, url: string): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          reject(new Error(`Upload failed with status: ${response.status}`));
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
 export function isVisionModel(model: string) {
   return (
     // model.startsWith("gpt-4-vision") ||

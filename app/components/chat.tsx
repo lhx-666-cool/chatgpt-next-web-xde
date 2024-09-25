@@ -26,6 +26,7 @@ import ResetIcon from "../icons/reload.svg";
 import BreakIcon from "../icons/break.svg";
 import SettingsIcon from "../icons/chat-settings.svg";
 import DeleteIcon from "../icons/clear.svg";
+import Upload from "../icons/upload-file.svg";
 import PinIcon from "../icons/pin.svg";
 import EditIcon from "../icons/rename.svg";
 import ConfirmIcon from "../icons/confirm.svg";
@@ -76,6 +77,7 @@ import {
   feedbackfunc,
   shouldChoice,
   getChoice,
+  uploadFile,
 } from "../utils";
 
 import dynamic from "next/dynamic";
@@ -113,6 +115,7 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 import { MultimodalContent } from "../client/api";
+import fetch from "node-fetch";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -453,8 +456,53 @@ export function ChatActions(props: {
     const nextTheme = themes[nextIndex];
     config.update((config) => (config.theme = nextTheme));
   }
+  function upload_file() {
+    let base64Output: string;
+    const inputElement = document.createElement("input");
+    inputElement.type = "file";
+    inputElement.accept = ".pdf";
+    inputElement.addEventListener("change", (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files ? target.files[0] : null;
+      if (!file) {
+        return;
+      }
+      if (file.type !== "application/pdf") {
+        showToast("请上传PDF");
+        return;
+      }
+      const maxSize = 20 * 1024 * 1024; // 20MB
+      if (file.size > maxSize) {
+        showToast("文件大小不超过20MB");
+        return;
+      }
+      setShowUploadFile(true);
+      setUploadFileName("请稍等，文件上传中");
+      // const backendUrl = "https://xdechat.xidian.edu.cn/formatapi"
+      // const backendUrl = "http://127.0.0.1:2222";
+      const backendUrl = "http://123.60.97.63:33333";
 
-  // stop all responses
+      uploadFile(file, backendUrl + "/upload")
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+          if (res.code === 200) {
+            setUploadFileName("已上传文件: " + file.name);
+            chatStore.updateCurrentSession((session) => {
+              session.file_url = res.filename;
+              console.log(session.file_url);
+            });
+          } else {
+            showToast("文件上传失败");
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          showToast("文件上传失败");
+        });
+    });
+    inputElement.click();
+  }
   const couldStop = ChatControllerPool.hasPending();
   const stopAll = () => ChatControllerPool.stopAll();
 
@@ -467,6 +515,8 @@ export function ChatActions(props: {
   );
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showUploadImage, setShowUploadImage] = useState(false);
+  const [showUploadFile, setShowUploadFile] = useState(false);
+  const [uploadFileName, setUploadFileName] = useState("");
 
   useEffect(() => {
     const show = isVisionModel(currentModel);
@@ -569,7 +619,13 @@ export function ChatActions(props: {
         text={currentModel}
         icon={<RobotIcon />}
       />
-
+      {chatStore.currentSession().type === "paper" && (
+        <ChatAction
+          onClick={() => upload_file()}
+          text={Locale.Chat.InputActions.UploadFile}
+          icon={<Upload />}
+        />
+      )}
       {showModelSelector && (
         <Selector
           defaultSelectedValue={currentModel}
@@ -587,6 +643,12 @@ export function ChatActions(props: {
             showToast(s[0]);
           }}
         />
+      )}
+
+      {showUploadFile && (
+        <React.Fragment>
+          <div className={styles["upload-file"]}>{uploadFileName}</div>
+        </React.Fragment>
       )}
     </div>
   );
@@ -685,9 +747,9 @@ function _Chat() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isScrolledToBottom = scrollRef?.current
     ? Math.abs(
-      scrollRef.current.scrollHeight -
-      (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
-    ) <= 1
+        scrollRef.current.scrollHeight -
+          (scrollRef.current.scrollTop + scrollRef.current.clientHeight),
+      ) <= 1
     : false;
   const { setAutoScroll, scrollDomToBottom } = useScrollToBottom(
     scrollRef,
@@ -968,27 +1030,27 @@ function _Chat() {
       .concat(
         isLoading
           ? [
-            {
-              ...createMessage({
-                role: "assistant",
-                content: "……",
-              }),
-              preview: true,
-            },
-          ]
+              {
+                ...createMessage({
+                  role: "assistant",
+                  content: "……",
+                }),
+                preview: true,
+              },
+            ]
           : [],
       )
       .concat(
         userInput.length > 0 && config.sendPreviewBubble
           ? [
-            {
-              ...createMessage({
-                role: "user",
-                content: userInput,
-              }),
-              preview: true,
-            },
-          ]
+              {
+                ...createMessage({
+                  role: "user",
+                  content: userInput,
+                }),
+                preview: true,
+              },
+            ]
           : [],
       );
   }, [config, context, isLoading, session.messages, userInput]);
@@ -1077,7 +1139,7 @@ function _Chat() {
         if (payload.key || payload.url) {
           showConfirm(
             Locale.URLCommand.Settings +
-            `\n${JSON.stringify(payload, null, 4)}`,
+              `\n${JSON.stringify(payload, null, 4)}`,
           ).then((res) => {
             if (!res) return;
             if (payload.key) {
@@ -1463,37 +1525,54 @@ function _Chat() {
                       </div>
                     )}
                     <div className={styles["chat-message-item"]}>
-                      {!shouldChoice(getMessageTextContent(message)) && <Markdown
-                        content={getMessageTextContent(message)}
-                        loading={
-                          (message.preview || message.streaming) &&
-                          message.content.length === 0 &&
-                          !isUser
-                        }
-                        onContextMenu={(e) => onRightClick(e, message)}
-                        onDoubleClickCapture={() => {
-                          if (!isMobileScreen) return;
-                          setUserInput(getMessageTextContent(message));
-                        }}
-                        fontSize={fontSize}
-                        parentRef={scrollRef}
-                        defaultShow={i >= messages.length - 6}
-                      />}
-                      {shouldChoice(getMessageTextContent(message)) && <React.Fragment><div>请选择问题类别</div> <br /><div>本次类别选择在本轮对话中有效，更换类别请重启开始对话</div> <br /></React.Fragment>}
-                      {shouldChoice(getMessageTextContent(message)) && getChoice(getMessageTextContent(message)).map((content, idx) => {
-                        return (
-                          <React.Fragment key={idx}>
-                            <Button variant="contained" color="primary" onClick={
-                              () => {
-                                session.type = content.split(",")[1];
-                                onResend(message)
-                              }
-                            }>{content.split(",")[0]}</Button>
-                            <br />
-                            <br />
-                          </React.Fragment>
-                        )
-                      })}
+                      {!shouldChoice(getMessageTextContent(message)) && (
+                        <Markdown
+                          content={getMessageTextContent(message)}
+                          loading={
+                            (message.preview || message.streaming) &&
+                            message.content.length === 0 &&
+                            !isUser
+                          }
+                          onContextMenu={(e) => onRightClick(e, message)}
+                          onDoubleClickCapture={() => {
+                            if (!isMobileScreen) return;
+                            setUserInput(getMessageTextContent(message));
+                          }}
+                          fontSize={fontSize}
+                          parentRef={scrollRef}
+                          defaultShow={i >= messages.length - 6}
+                        />
+                      )}
+                      {shouldChoice(getMessageTextContent(message)) && (
+                        <React.Fragment>
+                          <div>请选择问题类别</div> <br />
+                          <div>
+                            本次类别选择在本轮对话中有效，更换类别请重启开始对话
+                          </div>{" "}
+                          <br />
+                        </React.Fragment>
+                      )}
+                      {shouldChoice(getMessageTextContent(message)) &&
+                        getChoice(getMessageTextContent(message)).map(
+                          (content, idx) => {
+                            return (
+                              <React.Fragment key={idx}>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => {
+                                    session.type = content.split(",")[1];
+                                    onResend(message);
+                                  }}
+                                >
+                                  {content.split(",")[0]}
+                                </Button>
+                                <br />
+                                <br />
+                              </React.Fragment>
+                            );
+                          },
+                        )}
                       {getMessageImages(message).length == 1 && (
                         <img
                           className={styles["-image"]}
@@ -1563,10 +1642,11 @@ function _Chat() {
             }}
           />
           <label
-            className={`${styles["chat-input-panel-inner"]} ${attachImages.length != 0
-              ? styles["chat-input-panel-inner-attach"]
-              : ""
-              }`}
+            className={`${styles["chat-input-panel-inner"]} ${
+              attachImages.length != 0
+                ? styles["chat-input-panel-inner-attach"]
+                : ""
+            }`}
             htmlFor="chat-input"
           >
             <textarea
@@ -1617,7 +1697,6 @@ function _Chat() {
               onClick={() => doSubmit(userInput)}
             />
           </label>
-
         </div>
 
         {showExport && (
@@ -1632,7 +1711,16 @@ function _Chat() {
           />
         )}
         <center>
-          <div style={{ color: 'gray', fontSize: '13px', marginBottom: '10px', marginTop: '-8px' }}>GPT可能会犯错，请核查重要信息</div>
+          <div
+            style={{
+              color: "gray",
+              fontSize: "13px",
+              marginBottom: "10px",
+              marginTop: "-8px",
+            }}
+          >
+            GPT可能会犯错，请核查重要信息
+          </div>
         </center>
       </div>
     </React.Fragment>
