@@ -13,6 +13,7 @@ import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
+import LogoutIcon from "../icons/logout.svg"
 
 import Locale from "../locales";
 
@@ -28,7 +29,7 @@ import {
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
-import { isIOS, useMobileScreen } from "../utils";
+import { isIOS, useMobileScreen, getName } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
 
@@ -200,14 +201,27 @@ export function SideBar(props: { className?: string }) {
       </div>
       {/* <video src="#"></video> */}
       {/* <img src="http://mooc1.chaoxing.com/mooc-ans/phone/course/qrc?content=http%3A%2F%2Fmooc1.chaoxing.com%2Fmooc-ans%2Fcourse%2F221457285.html&enc=0d998a3f4db7dfb9ff91e2358d0cb53e" alt="" /> */}
-      <iframe
+      {/* <iframe
         src="/h5player/flv/index.html"
         className={styles["sidebar-flv"]}
         allowTransparency={true}
         height={240}
         width={400}
-      ></iframe>
-
+      ></iframe> */}
+      <div className={styles["sidebar-tail"]}>
+        <div className={styles["sidebar-name"]}>{getName()}</div>
+        <div>
+          <IconButton
+            icon={<LogoutIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.Logout}
+            onClick={() => {
+              window.localStorage.clear();
+              window.location.reload();
+            }}
+            shadow
+          />
+        </div>
+      </div>
       <div className={styles["sidebar-tail"]}>
         <div className={styles["sidebar-actions"]}>
           <div className={styles["sidebar-action"] + " " + styles.mobile}>

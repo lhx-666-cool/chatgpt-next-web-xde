@@ -26,43 +26,53 @@ export function getQueryVariable(variable: string) {
 }
 
 export function getUserId() {
-  return "114514";
-  // const value = localStorage.getItem('userid');
-  // if (value !== null) {
-  //   return value
-  // } else {
-  //   const ticket = getQueryVariable('ticket')
-  //   if (ticket === "") {
-  //     window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
-  //   } else {
-  //     fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/&ticket=' + ticket)
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error('Network response was not ok ' + response.statusText);
-  //         }
-  //         return response.text(); // 如果返回的是纯文本/HTML
-  //       })
-  //       .then(data => {
-  //         // console.log(data); // 在控制台打印请求结果
-  //         const regex = /<cas:uid>(.*?)<\/cas:uid>/;
-  //         const match = data.match(regex);
-  //         if (match) {
-  //           const result = match[1];
-  //           // console.log(result);  // 输出: test_xdechat
-  //           window.localStorage.setItem('userid', result)
-  //         } else {
-  //           window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
-  //         }
-  //       })
-  //       .catch(error => {
-  //         console.error('There was a problem with the fetch operation:', error);
-  //       });
-
-  //   }
-  // }
-  // return localStorage.getItem('userid');
+  // return "114514";
+  const value = localStorage.getItem('userid');
+  if (value !== null) {
+    return value
+  } else {
+    const ticket = getQueryVariable('ticket')
+    if (ticket === "") {
+      window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
+    } else {
+      fetch('https://ids.xidian.edu.cn/authserver/serviceValidate?service=https://xdechat.xidian.edu.cn/&ticket=' + ticket)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.text(); // 如果返回的是纯文本/HTML
+        })
+        .then(data => {
+          // console.log(data); // 在控制台打印请求结果
+          const regex = /<cas:uid>(.*?)<\/cas:uid>/;
+          const match = data.match(regex);
+          const nameRegex = /<cas:userName>(.*?)<\/cas:userName>/;
+          const nameMatch = data.match(regex);
+          if (match && nameMatch) {
+            const result = match[1];
+            // console.log(result);  // 输出: test_xdechat
+            window.localStorage.setItem('userid', result)
+            const nameResult = nameMatch[1];
+            window.localStorage.setItem('username', nameResult);
+          } else {
+            window.location.href = "https://ids.xidian.edu.cn/authserver/login?service=https://xdechat.xidian.edu.cn/"
+          }
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+  }
+  return window.localStorage.getItem('userid');
 }
 
+export function getName() {
+  getUserId();
+  if (window.localStorage.getItem('username')) {
+    return "你好 " + window.localStorage.getItem('username');
+  }
+  return "请登录"
+}
 export function trimTopic(topic: string) {
   // Fix an issue where double quotes still show in the Indonesian language
   // This will remove the specified punctuation from the end of the string
