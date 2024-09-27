@@ -92,7 +92,7 @@ const cn = {
     Download: "下载文件",
     Share: "分享到 ShareGPT",
     MessageFromYou: "用户",
-    MessageFromChatGPT: "ChatGPT",
+    MessageFromChatGPT: "慧通大模型",
     Format: {
       Title: "导出格式",
       SubTitle: "可以导出 Markdown 文本或者 PNG 图片",
@@ -160,7 +160,7 @@ const cn = {
     },
     InjectSystemPrompts: {
       Title: "注入系统级提示信息",
-      SubTitle: "强制给每次请求的消息列表开头添加一个模拟 ChatGPT 的系统提示",
+      SubTitle: "强制给每次请求的消息列表开头添加一个模拟 慧通大模型 的系统提示",
     },
     InputTemplate: {
       Title: "用户输入预处理",
@@ -455,8 +455,8 @@ const cn = {
     Skip: "直接开始",
     NotShow: "不再展示",
     ConfirmNoShow: "确认禁用？禁用后可以随时在设置中重新启用。",
-    Title: "挑选一个面具",
-    SubTitle: "现在开始，与面具背后的灵魂思维碰撞",
+    Title: "选择一个类别",
+    SubTitle: "现在开始，与不同类别的模型聊天",
     More: "查看全部",
   },
 

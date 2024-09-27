@@ -26,7 +26,7 @@ export function getQueryVariable(variable: string) {
 }
 
 export function getUserId() {
-  // return "114514";
+  return "114514";
   const value = localStorage.getItem('userid');
   if (value !== null) {
     return value
